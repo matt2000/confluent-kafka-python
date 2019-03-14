@@ -3,16 +3,11 @@
 import os
 from setuptools import setup, find_packages
 from distutils.core import Extension
-import sys
 import platform
 
-INSTALL_REQUIRES = list()
-
-if sys.version_info[0] < 3:
-    avro = 'avro'
-    INSTALL_REQUIRES.extend(['futures', 'enum34', 'requests'])
-else:
-    avro = 'avro-python3'
+INSTALL_REQUIRES = ["futures; python_version<'3.3'",
+                    "enum34; python_version<'3.5'",
+                    'requests']
 
 # On Un*x the library is linked as -lrdkafka,
 # while on windows we need the full librdkafka name.
@@ -51,6 +46,6 @@ setup(name='confluent-kafka',
       data_files=[('', ['LICENSE.txt'])],
       install_requires=INSTALL_REQUIRES,
       extras_require={
-          'avro': ['fastavro', 'requests', avro],
+          'avro': ['fastavro', 'requests', "avro; python_version<'3'", "avro-python3; python_version>='3'"],
           'dev': get_install_requirements("test-requirements.txt")
       })
